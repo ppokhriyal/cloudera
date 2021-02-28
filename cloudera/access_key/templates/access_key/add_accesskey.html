@@ -1,0 +1,175 @@
+{% extends 'home/layout.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{url_for('home.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('access_key.access_key_dashboard')}}">AWS Access Keys</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add</li>
+    </ol>
+</nav>
+<div class="row">
+    <div class="col-xxl-4 col-xl-5 mb-4">
+        <div class="card mb-4">
+            <div class="card-header text-dark">Add AWS Access Key</div>
+                <div class="card-body">
+                    <form method="POST" action="">
+                        {{form.hidden_tag()}}
+                        <div class="form-group">
+                            {% if form.keyname.errors %}
+                                <label class="small mb-1" for="inputKeyName">Key Name</label>
+                                {{ form.keyname(class="form-control is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.keyname.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <label class="small mb-1" for="inputKeyName">Key Name</label>
+                                {{form.keyname(class="form-control",id="keyname")}}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {% if form.access_keyid.errors %}
+                                <label class="small mb-1" for="inputKeyName">AWS Access Key Id</label>
+                                {{ form.access_keyid(class="form-control is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.access_keyid.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <label class="small mb-1" for="inputKeyName">AWS Access Key Id</label>
+                                {{ form.access_keyid(class="form-control",id="access_keyid")}}
+                            {% endif %}    
+                        </div>
+                        <div class="form-group">
+                            {% if form.secret_key.errors %}
+                                <label class="small mb-1" for="inputKeyName">AWS Secret Access Key </label>
+                                {{ form.secret_key(class="form-control is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.secret_key.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <label class="small mb-1" for="inputKeyName">AWS Secret Access Key </label>
+                                {{ form.secret_key(class="form-control",id="secret_key")}}
+                            {% endif %}      
+                        </div>
+                </div>
+                        <div class="card-footer">
+                            {{form.submit(class="btn btn-primary")}}
+                            <button type="button" class="btn btn-secondary" onclick="verifykey(this)">Verify Access Key</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+        <div class="col-xxl-4 col-xl-7 mb-4">
+            <div class="card mb-4 card-waves">
+                <div class="card-header text-dark">AWS Access Key Response</div>
+                <div class="card-body ">
+                    <div class="alert alert-icon " id="verify" role="alert">
+                        <div class="alert-icon-content">
+                            <h6 class="alert-heading text-center text-info">Verify your AWS Access Key</h6>
+                        </div>
+                        <img class="img-fluid " id="loading_img" src="{{url_for('static',filename='images/processing-qqpana.svg')}}" style="max-width: 16.5rem;">  
+                    </div>
+
+                    <div class="alert alert-icon" id="loading" role="alert">
+                        <div class="alert-icon-content">
+                            <h6 class="alert-heading text-center text-primary">Loading Access Key Information ...</h6>
+                        </div>
+                        <img class="img-fluid" id="loading_img" src="{{url_for('static',filename='images/loading.svg')}}" style="max-width: 16rem;">  
+                    </div>
+                    <div class="alert  alert-icon" id="fail" role="alert">
+                        <div class="alert-icon-content">
+                            <h6 class="alert-heading text-center text-danger">No data found on your AWS access key</h6>
+                        </div>
+                        <img class="img-fluid float-center" id="fail_img" src="{{url_for('static',filename='images/nodatafound.svg')}}" style="max-width: 12.4rem;">
+                    </div>
+                    <div class="alert  alert-icon" id="pass" role="alert">
+                        <div class="alert-icon-content">
+                            <h6 class="alert-heading text-center text-success">Data found on your AWS access key</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p class="text-primary text-left">Account</p>
+                            </div>
+                            <div class="col">
+                                <p class="text-primary text-left">Arn</p>
+                            </div>
+                            <div class="col">
+                                <p class="text-primary text-left">UserId</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p class="text-left text-dark" id="account"></p>
+                            </div>
+                            <div class="col">
+                                <p class="text-left text-dark"  id="arn"></p>
+                            </div>
+                            <div class="col">
+                                <p class="text-left text-dark"  id="userid"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //Hide images
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("fail").style.display = "none";
+    document.getElementById("pass").style.display = "none";
+</script>
+<script type="text/javascript">
+    function verifykey(myobj){
+        //Make sure all the information filled
+        keyname = document.getElementById("keyname").value;
+        accesskey = document.getElementById("access_keyid").value;
+        secretkey = document.getElementById("secret_key").value;
+
+        if(keyname.length == 0 || accesskey.length == 0 || secretkey == 0 ){
+            alert("Keyname,AccessKeyId and SecretKey is required.");
+            return false;
+        }
+        //Hide images
+        document.getElementById("verify").style.display = "none";
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("fail").style.display = "none";
+        document.getElementById("pass").style.display = "none";
+
+      
+        //Show Loading image/info
+        document.getElementById("loading").style.display = "block";
+        //Ajax send Post data
+        req = $.ajax({
+            url : '/awsaccesskey/verify_accesskey/'+accesskey+'/'+secretkey,
+            type: 'POST'
+        });
+        //Ajax get the result
+        req.done(function(data){
+            //if result is fail
+            if(data.result == "fail")
+            {
+                //Show fail image
+                document.getElementById("verify").style.display = "none";
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("fail").style.display = "block";
+            }
+            else{
+                //Show pass image
+                document.getElementById("verify").style.display = "none";
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("pass").style.display = "block";
+                document.getElementById("account").innerHTML = data.msg['Account'];
+                document.getElementById("arn").innerHTML = data.msg['Arn'];
+                document.getElementById("userid").innerHTML = data.msg['UserId'];
+            }
+        });
+    };
+</script>
+{% endblock content %}

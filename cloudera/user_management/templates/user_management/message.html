@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/style.css')}}">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <title>{{title}}</title>
+  </head>
+  <body class="bg-white">
+    <div id="layoutError">
+        <div id="layoutError_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6">
+                            <div class="text-center mt-4">
+                                {% if message == "mail_sent" %}
+                                    <img class="img-fluid p-4" src="{{url_for('static',filename='message_images/mailsent.svg')}}" alt="">
+                                    <p class="lead">A verification link has been sent to your email account.</p>
+                                    <hr>
+                                    Please click on the link that has just been sent to your email account to varify your email-id.
+                                    <a class="text-arrow-icon text-decoration-none" href="{{url_for('user_management.login')}}"><i class="fas fa-arrow-circle-left m-2"></i>
+                                        Return to Login
+                                    </a>
+                                {% elif message == "mail_expired" %}
+                                    <img class="img-fluid p-4" src="{{url_for('static',filename='message_images/mail_expired.svg')}}" alt="">
+                                    <p class="lead">Your account creation link is expired.Please create new account.</p>
+                                    <hr>
+                                    Please wait for 30 minutes and create your account again.
+                                    <a class="text-arrow-icon text-decoration-none" href="{{url_for('user_management.login')}}"><i class="fas fa-arrow-circle-left m-2"></i>
+                                        Return to Login
+                                </a>
+                                {% elif message == "mail_linkerror" %}
+                                    <img class="img-fluid p-4" src="{{url_for('static',filename='message_images/mail_expired.svg')}}" alt="">
+                                    <p class="lead">Your account creation verification link is invalid. Please check the link.</p>
+                                    <a class="text-arrow-icon text-decoration-none" href="{{url_for('user_management.login')}}"><i class="fas fa-arrow-circle-left m-2"></i>
+                                        Return to Login
+                                {% elif message == "email_confirm_already" %}
+                                    <img class="img-fluid p-4" src="{{url_for('static',filename='message_images/email_confirmed_already.svg')}}" alt="">
+                                    <p class="lead">Your email id is already verified . Please login.</p>
+                                    <hr>
+                                    <a class="text-arrow-icon text-decoration-none" href="{{url_for('user_management.login')}}"><i class="fas fa-arrow-circle-left m-2"></i>
+                                        Return to Login   
+                                {% elif message == "email_confirm" %}
+                                    <img class="img-fluid p-4" src="{{url_for('static',filename='message_images/email_confirmed.svg')}}" alt="">
+                                    <p class="lead">Your account creation verification is done successfully.</p>
+                                    <hr>
+                                    <a class="text-arrow-icon text-decoration-none" href="{{url_for('user_management.login')}}"><i class="fas fa-arrow-circle-left m-2"></i>
+                                        Return to Login
+                                {% elif message == "user_not_found" %}
+                                    <img class="img-fluid p-4" src="{{url_for('static',filename='message_images/404-error-pana.svg')}}" alt="">
+                                    <p class="lead">This requested URL was not found on this server.</p>
+                                    <hr>
+                                    <a class="text-arrow-icon text-decoration-none" href="{{url_for('user_management.login')}}"><i class="fas fa-arrow-circle-left m-2"></i>
+                                        Return to Login
+                                {% elif message == "password_reset_done" %}
+                                    <img class="img-fluid p-4" src="{{url_for('static',filename='message_images/password_reset.svg')}}" alt="">
+                                    <p class="lead">Your Password is reset successfully.</p>
+                                    <hr>
+                                    <a class="text-arrow-icon text-decoration-none" href="{{url_for('user_management.login')}}"><i class="fas fa-arrow-circle-left m-2"></i>
+                                        Return to Login
+                                {% elif message == "passwordreset_mail_sent" %}
+                                    <img class="img-fluid p-4" src="{{url_for('static',filename='message_images/mailsent.svg')}}" alt="">
+                                    <p class="lead">Your Password reset mail has been sent successfully.</p>
+                                    <hr>
+                                    <a class="text-arrow-icon text-decoration-none" href="{{url_for('user_management.login')}}"><i class="fas fa-arrow-circle-left m-2"></i>
+                                        Return to Login
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div id="layoutError_footer">
+            <footer class="footer mt-auto footer-light">
+                <div class="container-fluid">
+                    <div class="row  text-dark">
+                        <div class="col small ">Copyright © Your Website 2020</div>
+                        <div class="col text-md-right small">
+                            <a href="#!">Privacy Policy</a>
+                            ·
+                            <a href="#!">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

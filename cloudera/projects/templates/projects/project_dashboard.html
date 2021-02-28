@@ -1,0 +1,56 @@
+{% extends 'home/layout.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{url_for('home.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Projects</li>
+    </ol>
+</nav>
+{% if project_len == 0 %}
+<div class="alert alert-dark" role="alert">
+    Projects not found in your database!!
+ </div>
+ <a class="btn btn-success btn-sm rounded-0 float-right" href="{{url_for('projects.create_project')}}" role="button">Create New Project</a>
+{% else %}
+<div class="card-header">Projects
+    <a class="btn btn-success btn-sm rounded-0 float-right" href="{{url_for('projects.create_project')}}" role="button">Create New Project</a>
+</div>
+<table class="table table-bordered table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Project Name</th>
+            <th scope="col">Region</th>
+            <th scope="col">Access Key Name</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in project_record.items %}
+        <tr>
+            <td>{{i.project_name}}</td>
+            <td>{{region_dict[i.project_region]}} | {{i.project_region}}</td>
+            <td>{{i.accesskeyname}}</td>
+            <td>{{i.date_created.strftime('%d-%m-%Y')}}</td>
+            <td><a href="#"><i class="fas text-danger fa-trash-alt lift"></i></a>
+                <a href="#" class="text-primary"><i class="fas fa-project-diagram m-2 lift text-secondary"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="rounded-0">
+    {% for page_num in project_record.iter_pages(left_edge=1,right_edge=1,left_current=1,right_current=2) %}
+        {% if page_num %}
+            {% if project_record.page == page_num %}
+                <a class="btn btn-primary btn-sm mt-2" href="{{ url_for('projects.project_dashboard',page=page_num)}}">{{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-info mt-2" href="{{ url_for('projects.project_dashboard',page=page_num)}}">{{ page_num }}</a>
+            {% endif %}  
+          {% else %}
+            ...
+          {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,112 @@
+{% extends 'home/layout.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{url_for('home.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('projects.project_dashboard')}}">Projects</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create Project</li>
+    </ol>
+</nav>
+<div class="row">
+    <div class="col-xxl-4 col-xl-6 mb-4">
+        <div class="card mb-4">
+            <div class="card-header text-dark">Create New Project</div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {{form.hidden_tag()}}
+                    <div class="form-group">
+                        {% if form.projectname.errors %}
+                            <label class="small mb-1" for="inputKeyName">Project Name</label>
+                            {{ form.projectname(class="form-control is-invalid")}}
+                            <div class="invalid-feedback">
+                                {% for error in form.projectname.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <label class="small mb-1" for="inputKeyName">Project Name</label>
+                            {{ form.projectname(class="form-control")}}	
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="inputKeyName">Project Region</label>
+                        {{form.awsregion(class="form-control")}}
+                    </div>
+                    <div class="form-group">
+                        {% if form.access_keyname.errors %}
+                            <label class="small mb-1" for="inputKeyName">Access Key Name</label>
+                            {{ form.access_keyname(class="form-control is-invalid")}}
+                            <div class="invalid-feedback">
+                                {% for error in form.access_keyname.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <label class="small mb-1" for="inputKeyName">Access Key Name</label>
+                            {{ form.access_keyname(class="form-control",id="accesskey_input")}}	
+                        {% endif %}
+                    </div>
+                    {{form.submit(class="btn btn-primary")}}
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-xl-6 mb-4">
+        <div class="card mb-4">
+            <div class="card-header">Available AWS Access Keys</div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover table-sm" id="accesskey_table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Key Name</th>
+                            <th scope="col">AWS Access Key Id</th>
+                            <th scope="col">Available</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if accesskey_len == 0 %}
+                            <tr>
+                                <td>NA</td>
+                                <td>NA</td>
+                                <td>NA</td>
+                            </tr>
+                            <p class="text-info">Access Keys not available currently. Please <a href="{{url_for('access_key.add_accesskey')}}">Add</a></p>
+                        {% else %}
+                            {% for i in accesskey_record.items %}
+                                {% if i.project_id == None %}
+                                    <tr>
+                                        <td>{{i.keyname}}</td>
+                                        <td>{{i.accesskeyid}}</td>
+                                        <td><button type="button" class=" btn btn-sm btn-success" onclick="addaccesskey(this)">Add</button></td>
+                                    </tr>
+                                {% else %}
+                                    <p class="text-info">Access Keys not available currently. Please <a href="{{url_for('access_key.add_accesskey')}}">Add</a></p>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+                <div class="rounded-0">
+                    {% for page_num in accesskey_record.iter_pages(left_edge=1,right_edge=1,left_current=1,right_current=2) %}
+                        {% if page_num %}
+                            {% if accesskey_record.page == page_num %}
+                                  <a class="btn btn-primary btn-sm mt-2" href="{{ url_for('projects.create_project',page=page_num)}}">{{ page_num }}</a>
+                            {% else %}
+                                  <a class="btn btn-outline-info mt-2" href="{{ url_for('projects.create_project',page=page_num)}}">{{ page_num }}</a>
+                            {% endif %}  
+                          {% else %}
+                            ...
+                          {% endif %}
+                    {% endfor %}
+                </div>
+                <script type="text/javascript">
+                    function addaccesskey(obj){
+  					var keyname = $(obj).closest('tr').find('td:first-child').text();
+  					document.getElementById("accesskey_input").value = keyname;
+  					};
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

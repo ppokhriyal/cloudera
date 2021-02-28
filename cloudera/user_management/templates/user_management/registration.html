@@ -1,0 +1,84 @@
+{% extends 'user_management/layout.html' %}
+{% block content %}
+<div class="col-lg-5">
+    <div class="card shadow-lg border-0 rounded-lg mt-5">
+        <div class="card-header justify-content-center">
+            <h2 class="text-center display-4"><i class="fab fa-cloudversify"></i> Cloudera</h2>
+            <h3 class="font-weight-light my-2">Create Account</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="">
+                {{form.hidden_tag()}}
+                <div class="form-group">
+                    {% if form.username.errors %}
+                        <label class="small mb-1">Username</label>
+                        {{form.username(class="form-control py-4 is-invalid",placeholder="Enter username")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <label class="small mb-1">Username</label>
+                        {{form.username(class="form-control py-4",placeholder="Enter Username")}}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {% if form.email.errors %}
+                        <label class="small mb-1" for="inputEmailAddress">Email</label>
+                        {{form.email(class="form-control py-4 is-invalid",placeholder="Enter email address")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <label class="small mb-1" for="inputEmailAddress">Email</label>
+                        {{form.email(class="form-control py-4",placeholder="Enter email address")}}
+                    {% endif %}
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {% if form.password.errors %}
+                                <label class="small mb-1" for="inputPassword">Password</label>
+                                {{ form.password(class="form-control py-4 is-invalid",placeholder="Enter password")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.password.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <label class="small mb-1" for="inputPassword">Password</label>
+                                {{ form.password(class="form-control py-4",placeholder="Enter password")}}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {% if form.confirm_password.errors %}
+                                <label class="small mb-1" for="inputConfirmPassword">Confirm Password</label>
+                                {{ form.confirm_password(class="form-control py-4 is-invalid",placeholder="Confirm password")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.confirm_password.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>  
+                            {% else %}
+                                <label class="small mb-1" for="inputConfirmPassword">Confirm Password</label>
+                                {{ form.confirm_password(class="form-control py-4",placeholder="Confirm password")}}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mt-4 mb-0">
+                    {{form.submit(class="btn btn-primary btn-block")}}
+                </div>
+            </form>
+        </div>
+        <div class="card-footer text-center">
+            <div class="small"><a href="{{url_for('user_management.login')}}">Have an account? Go to login</a></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

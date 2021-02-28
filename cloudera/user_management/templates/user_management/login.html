@@ -1,0 +1,57 @@
+{% extends 'user_management/layout.html' %}
+{% block content %}
+<div class="col-lg-5">
+    <div class="card shadow-lg border-0 rounded-lg mt-5">
+        <div class="card-header justify-content-center">
+            <h2 class="text-center display-4"><i class="fab fa-cloudversify"></i> Cloudera</h2>
+            <h3 class="font-weight-light my-2">Login</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="">
+                {{form.hidden_tag()}}
+                <div class="form-group">
+                    {% if form.email.errors %}
+            		    <label class="small mb-1" for="inputEmailAddress">Email</label>
+            		    {{form.email(class="form-control py-4 is-invalid",placeholder="Enter email address")}}
+                	    <div class="invalid-feedback">
+                		    {% for error in form.email.errors %}
+                			    <span>{{ error }}</span>
+                		    {% endfor %}
+                	    </div>
+                	    {% else %}
+                	        <label class="small mb-1" for="inputEmailAddress">Email</label>
+                	        {{form.email(class="form-control py-4",placeholder="Enter email address")}}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {% if form.password.errors %}
+                        <label class="small mb-1" for="inputPassword">Password</label>
+                        {{form.password(class="form-control py-4 is-invalid",placeholder="Enter password")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <label class="small mb-1" for="inputPassword">Password</label>
+                        {{form.password(class="form-control py-4",placeholder="Enter password")}}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        {{form.remember(class="custom-control-input")}}
+                        <label class="custom-control-label" for="rememberPasswordCheck">Remember Me</label>
+                    </div>
+                </div>
+                <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                    <a class="small" href="{{url_for('user_management.forgotpasswd')}}">Forgot Password?</a>
+                    {{form.submit(class="btn btn-primary")}}
+                </div>
+            </form>
+        </div>
+        <div class="card-footer text-center">
+            <div class="small"><a href="{{url_for('user_management.registration')}}">Need an account? Sign up!</a></div>
+        </div>
+    </div>    
+</div>
+{% endblock content %}
